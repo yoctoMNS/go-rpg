@@ -173,6 +173,29 @@ const walkSpeed = 1.5
 - **ゼロ値で使えるなら使えるようにする**（`var s Stats` がそのまま有効）
 - 初期化が必要なら `New` コンストラクタを用意し、**必須引数は引数で、任意設定は Option で** 受ける
 - **公開フィールドは慎重に。** 外から書き換えられて困る値はメソッド経由にする
+- **フィールドの説明は行末コメントで書く。** フィールドの上に書くと、コメントを挟んだ時点で
+  `gofmt` の桁揃えのグループが途切れ、名前・型の列がズレる。行末コメントなら
+  名前・型・コメントの3列とも `gofmt` が自動で揃えてくれる
+
+```go
+// ○ 行末コメント。gofmt が name / type / comment を3列とも揃える
+type Config struct {
+	Title        string // window title
+	ScreenWidth  int    // logical resolution width
+	ScreenHeight int    // logical resolution height
+}
+
+// × フィールドの上にコメント。ScreenWidth 以降の桁揃えが効かなくなる
+type Config struct {
+	// Title is the window title.
+	Title string
+	// ScreenWidth is the logical resolution width.
+	ScreenWidth int
+}
+```
+
+フィールドが自明でない・複数行の説明が要る場合だけ、型定義の doc コメントの中で
+まとめて説明する（フィールドごとに上へ書かない）。
 
 ```go
 // 必須は引数、任意は可変長オプション（Functional Options パターン）

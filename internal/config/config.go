@@ -3,18 +3,11 @@ package config
 
 // Config represents the game's startup configuration.
 type Config struct {
-	// Title is the window title.
-	Title string
-
-	// ScreenWidth and ScreenHeight are the logical resolution.
-	ScreenWidth  int
-	ScreenHeight int
-
-	// WindowScale is the initial window scale relative to the logical resolution.
-	WindowScale int
-
-	// TileSize is the pixel size of one tile.
-	TileSize int
+	Title        string // window title
+	ScreenWidth  int    // logical resolution width
+	ScreenHeight int    // logical resolution height
+	WindowScale  int    // initial window scale relative to the logical resolution
+	TileSize     int    // pixel size of one tile
 }
 
 // Default returns the development-time default values.
