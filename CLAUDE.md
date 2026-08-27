@@ -19,6 +19,8 @@ Go + Ebitengine で 2D RPG の基盤を作る **学習プロジェクト**。
 | `docs/03-architecture.md` | パッケージ構成とレイヤ設計 |
 | `docs/PROGRESS.md` | いまどの Day まで進んでいるか |
 | `docs/plan/week-NN.md` | 今日やる作業の詳細 |
+| `assets/README.md` | 素材のタイルサイズ・オフセット規則・命名規則（切り出し前に必読） |
+| `assets/CREDITS.md` | 素材の出典・ライセンス |
 
 ## 作業の進め方
 
@@ -39,6 +41,13 @@ Go + Ebitengine で 2D RPG の基盤を作る **学習プロジェクト**。
 - **公開する型・関数には doc コメント。** 「何を」ではなく「なぜ」を書く
 - **インターフェースは使う側のパッケージに定義する**
 - **痛みが出る前にパターンを入れない。** 計画書に書かれた週まで待つ
+
+## アセット
+
+- 素材は `assets/images/dungeon-tileset-ii/` に配置済み（Dungeon Tileset II v1.7 / 0x72 / CC0）
+- **`frames/` 配下に1コマずつ切り出し済みのPNGがある。** 統合シートを自前で切り出す必要はない
+- タイルは16x16、キャラは16x28前後（16x16グリッドの下端に接地）。詳細は `assets/README.md`
+- 素材を追加したら `assets/CREDITS.md` にその場で追記する
 
 ## テスト
 

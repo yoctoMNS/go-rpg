@@ -19,16 +19,21 @@
 
 ### やること
 
-1. 素材を用意する（自作でも配布素材でもよい）
-   - 推奨: [ぴぽや倉庫](https://pipoya.net/sozai/) などの 32x32 キャラチップ
-   - **ライセンスを `assets/CREDITS.md` に必ず記録する**（後から調べ直すのはほぼ不可能）
+1. **素材はすでに `assets/images/dungeon-tileset-ii/` に配置済み**。まず
+   [`assets/README.md`](../../assets/README.md) を読み、タイルサイズと命名規則を頭に入れる
+   - タイル: `atlas_floor-16x16.png` / `atlas_walls_low-16x16.png` は16x16グリッド
+   - キャラクター・モンスター: `frames/` 配下に**1コマずつ切り出し済み**のPNGがある
+     （例: `elf_m_idle_anim_f0.png`）。統合シートを自前で切り出す必要はない
+   - ライセンスは確認済み（CC0）。[`assets/CREDITS.md`](../../assets/CREDITS.md) 参照
 2. `assets/assets.go` に埋め込み FS を作る
    ```go
    package assets
 
    import "embed"
 
-   //go:embed images/*.png
+   // サブディレクトリごと埋め込む。all: を付けないと _ や . で始まる
+   // ファイルが除外されるが、今回は不要なので付けなくてよい。
+   //go:embed images
    var FS embed.FS
    ```
 3. `assets.LoadImage(path string) (*ebiten.Image, error)` を書く
@@ -41,7 +46,7 @@
 make run
 ```
 
-- [ ] 画面の左上にキャラクター画像がそのまま1枚表示される（まだ動かなくてよい）
+- [ ] 画面の左上に `frames/elf_m_idle_anim_f0.png` などが1枚表示される（まだ動かなくてよい）
 - [ ] `go build` した実行ファイルを別ディレクトリにコピーしても動く（＝埋め込めている証拠）
 
 ### ポイント
@@ -60,6 +65,11 @@ make run
 | 学ぶこと | `SubImage` / 座標計算の切り出し方 |
 
 ### やること
+
+> 補足: 今回の素材はキャラクターが `frames/` に1コマずつ切り出し済みのため、
+> **キャラクターに `Sheet` は使わなくてもよい**（個別ファイルを読むだけで足りる）。
+> `Sheet` は `atlas_floor-16x16.png` のような**グリッド状のタイル画像**を
+> 切り出すために使う。ここでは学習目的でどちらも試す。
 
 1. `sprite.Sheet` を作る
    ```go

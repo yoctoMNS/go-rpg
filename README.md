@@ -12,6 +12,7 @@ Go + [Ebitengine](https://ebitengine.org/) で 2D RPG の基盤を作るプロ�
 | --- | --- |
 | 進捗 | **Day 01 / 60 完了** |
 | 動くもの | ウィンドウが開き、TPS/FPS とフレーム数が表示される |
+| 素材 | 配置済み（Dungeon Tileset II v1.7 / 0x72 / CC0）。仕様は [`assets/README.md`](assets/README.md) |
 
 進捗の詳細は [`docs/PROGRESS.md`](docs/PROGRESS.md) を参照。
 
@@ -71,9 +72,13 @@ go-rpg/
 ├── internal/
 │   ├── config/       # 起動時設定
 │   └── game/         # ebiten.Game 実装（ゲームループ）
-├── assets/           # 画像・音・データ（//go:embed で埋め込む）
-├── docs/             # 計画書とログ
-└── scripts/          # 開発補助スクリプト
+├── assets/               # 画像・音・データ（Day 06 で //go:embed する）
+│   ├── README.md         #   ★ タイルサイズ・命名規則の仕様
+│   ├── CREDITS.md        #   ★ 出典とライセンス
+│   └── images/
+│       └── dungeon-tileset-ii/  # キャラ・モンスター・タイル一式（CC0）
+├── docs/                 # 計画書とログ
+└── scripts/              # 開発補助スクリプト
 ```
 
 最終的な構成（12週後の姿）は [`docs/03-architecture.md`](docs/03-architecture.md) を参照。
@@ -102,4 +107,6 @@ go-rpg/
 ## ライセンス
 
 コードは [LICENSE](LICENSE) を参照。
-アセットのライセンスは `assets/CREDITS.md` に個別に記載する。
+
+アセット（Dungeon Tileset II / 0x72）は **CC0**（パブリックドメイン相当）。
+詳細と引用元は [`assets/CREDITS.md`](assets/CREDITS.md) を参照。
