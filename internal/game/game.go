@@ -1,8 +1,8 @@
-// Package game は Ebitengine のゲームループ本体を提供する。
+// Package game provides the core Ebitengine game loop.
 //
-// Ebitengine は「Game Loop パターン」を ebiten.Game インターフェース
-// (Update / Draw / Layout) として提供する。本パッケージはその実装を持ち、
-// 以降のフェーズではここから Scene へ処理を委譲していく。
+// Ebitengine exposes the Game Loop pattern via the ebiten.Game interface
+// (Update / Draw / Layout). This package holds that implementation; later
+// phases will delegate from here down to individual Scenes.
 package game
 
 import (
@@ -15,59 +15,63 @@ import (
 	"github.com/yoctoMNS/go-rpg/internal/config"
 )
 
-// backgroundColor はまだ描くものが無い間の背景色。
-// 「真っ黒」だと描画が動いているのか落ちているのか判別しづらいので、
-// あえて濃紺にしておく（動作確認しやすさ優先）。
+// backgroundColor is the background color used while there is nothing else
+// to draw yet. Plain black makes it hard to tell whether rendering is
+// running or has crashed, so a dark navy is used instead (favors easy
+// visual verification).
 var backgroundColor = color.RGBA{R: 0x10, G: 0x18, B: 0x30, A: 0xff}
 
-// Game は ebiten.Game の実装。
+// Game implements ebiten.Game.
 //
-// Ebitengine 側からは Update -> Draw の順で毎フレーム呼ばれる。
-//   - Update: 状態更新のみ。描画してはいけない。
-//   - Draw:   描画のみ。状態を変更してはいけない。
+// Ebitengine calls Update then Draw, in that order, every frame:
+//   - Update: state changes only. Must not draw.
+//   - Draw:   drawing only. Must not change state.
 //
-// この「更新と描画を混ぜない」規律が、後々のリファクタリング
-// （シーン分割・ECS化・テスト追加）を圧倒的に楽にする。
+// Keeping update and draw from mixing is a discipline that makes later
+// refactoring (splitting into scenes, moving to ECS, adding tests) far easier.
 type Game struct {
 	cfg config.Config
 
-	// ticks は Update が呼ばれた回数。
-	// 実時間ではなく「論理フレーム数」で時間を数えるのがゲームの基本。
-	// 実時間で数えると、動作環境ごとに挙動が変わり再現性が失われる。
+	// ticks counts how many times Update has been called.
+	// Counting logical frames instead of wall-clock time is the standard
+	// approach in games: real-time counting makes behavior vary by
+	// environment and destroys reproducibility.
 	ticks uint64
 }
 
-// New は Game を生成する。
+// New creates a Game.
 func New(cfg config.Config) *Game {
 	return &Game{cfg: cfg}
 }
 
-// Update は1フレーム分の状態更新を行う。既定では毎秒60回呼ばれる。
+// Update advances one frame's worth of state. Called 60 times per second by default.
 func (g *Game) Update() error {
 	g.ticks++
 	return nil
 }
 
-// Draw は screen に1フレーム分の描画を行う。
+// Draw renders one frame's worth of content to screen.
 func (g *Game) Draw(screen *ebiten.Image) {
 	screen.Fill(backgroundColor)
 
-	// Day 01 の動作確認用。実装が進んだら消す前提の一時コード。
+	// Verification aid for Day 01; treated as temporary and expected to be
+	// removed as the implementation progresses.
 	msg := fmt.Sprintf("Go RPG\nticks: %d\nTPS: %.1f  FPS: %.1f",
 		g.ticks, ebiten.ActualTPS(), ebiten.ActualFPS())
 	ebitenutil.DebugPrint(screen, msg)
 }
 
-// Layout はゲームの論理解像度を返す。
+// Layout returns the game's logical resolution.
 //
-// 戻り値の大きさに関わらず、Ebitengine が実ウィンドウサイズへ拡大縮小する。
-// つまりゲーム側のコードは常に「論理解像度の座標系」だけを考えればよい。
+// Regardless of the return value, Ebitengine scales it up to the actual
+// window size — so game code only ever has to reason about the logical
+// resolution's coordinate system.
 func (g *Game) Layout(_, _ int) (screenWidth, screenHeight int) {
 	return g.cfg.ScreenWidth, g.cfg.ScreenHeight
 }
 
-// Run はウィンドウを生成してゲームループを開始する。
-// ウィンドウが閉じられると nil を返す。
+// Run creates the window and starts the game loop.
+// Returns nil once the window is closed.
 func Run(cfg config.Config) error {
 	ebiten.SetWindowTitle(cfg.Title)
 	ebiten.SetWindowSize(cfg.WindowSize())

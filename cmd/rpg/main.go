@@ -1,7 +1,7 @@
 // Command rpg is the entry point of the game.
 //
-// 責務はここでは「起動」だけに絞る。ゲームのロジックは internal 配下に置き、
-// main は「設定を組み立てて実行する」ことのみを行う（Composition Root）。
+// main is kept to a single responsibility: startup. Game logic lives under
+// internal; main only assembles configuration and runs it (Composition Root).
 package main
 
 import (

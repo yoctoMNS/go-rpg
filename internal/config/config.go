@@ -1,35 +1,36 @@
-// Package config はゲーム全体で共有する起動時設定を提供する。
+// Package config provides the startup configuration shared across the game.
 //
-// 「マジックナンバーをコードに散らさない」ことが目的。
-// 値をここに集約しておくと、後から設定ファイル(JSON/TOML)読み込みに
-// 差し替えるときも Config 構造体の生成方法を変えるだけで済む。
+// The goal is to keep magic numbers out of the rest of the codebase.
+// Collecting them here means that switching to a config file (JSON/TOML)
+// later only requires changing how Config is constructed.
 package config
 
-// Config はゲームの起動時設定を表す。
+// Config represents the game's startup configuration.
 //
-// 実行中に変化する値（プレイヤーHPなど）は入れない。
-// あくまで「起動時に決まり、以後変わらない」ものだけを持たせる。
+// It must not hold values that change at runtime (e.g. player HP).
+// Only values that are fixed at startup and never change afterward belong here.
 type Config struct {
-	// Title はウィンドウタイトル。
+	// Title is the window title.
 	Title string
 
-	// ScreenWidth / ScreenHeight は論理解像度（ゲーム内部の座標系）。
-	// ウィンドウサイズとは独立しており、Ebitengine が拡大縮小して描画する。
-	// ドット絵RPGでは低めの論理解像度を固定し、整数倍で拡大するのが定石。
+	// ScreenWidth / ScreenHeight is the logical resolution (the game's
+	// internal coordinate system). It is independent of the window size;
+	// Ebitengine scales it up for display. Pixel-art RPGs conventionally
+	// fix a low logical resolution and scale it by an integer factor.
 	ScreenWidth  int
 	ScreenHeight int
 
-	// WindowScale は論理解像度に対する初期ウィンドウ倍率。
+	// WindowScale is the initial window scale relative to the logical resolution.
 	WindowScale int
 
-	// TileSize は1タイルのピクセルサイズ。マップ・当たり判定の基準単位。
+	// TileSize is the pixel size of one tile, the base unit for maps and collision.
 	TileSize int
 }
 
-// Default は開発時の既定値を返す。
+// Default returns the development-time default values.
 //
-// 320x240 (QVGA) はファミコン〜スーファミ系RPGの見た目に近く、
-// 16pxタイルで 20x15 タイルがちょうど収まる扱いやすいサイズ。
+// 320x240 (QVGA) resembles the look of NES/SNES-era RPGs, and with 16px
+// tiles it fits exactly 20x15 tiles — a convenient size to work with.
 func Default() Config {
 	return Config{
 		Title:        "Go RPG",
@@ -40,7 +41,7 @@ func Default() Config {
 	}
 }
 
-// WindowSize は初期ウィンドウの実ピクセルサイズを返す。
+// WindowSize returns the actual pixel size of the initial window.
 func (c Config) WindowSize() (width, height int) {
 	return c.ScreenWidth * c.WindowScale, c.ScreenHeight * c.WindowScale
 }

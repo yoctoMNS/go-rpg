@@ -145,18 +145,21 @@ func LoadTileset(path string) (*Tileset, error) {
 
 ## 7. コメント
 
-- **公開（大文字始まり）の型・関数には必ず doc コメント。** `// Xxx は〜する。` の形式
+- **コメントは英語で書く。** Go の標準ライブラリ・コミュニティの慣習に合わせる
+  （このリポジトリの計画書・作業ログは学習記録として日本語のままでよいが、
+  ソースコード中のコメントは英語に統一する）
+- **公開（大文字始まり）の型・関数には必ず doc コメント。** `// Xxx does ...` の形式
 - **「何をしているか」ではなく「なぜそうしたか」を書く。** コードを読めばわかることは書かない
 - マジックナンバーには必ず理由を書くか、名前付き定数にする
 
 ```go
-// ○ なぜを説明している
-// 移動速度は 1.5px/frame。TileSize(16px) の割り切れない値にすることで、
-// タイル境界ちょうどで停止して引っかかる現象を避けている。
+// Good: explains why.
+// Movement speed is 1.5px/frame. Using a value that doesn't evenly divide
+// TileSize (16px) avoids getting stuck exactly on tile boundaries.
 const walkSpeed = 1.5
 
-// × コードそのまま
-// speed に 1.5 を代入する
+// Bad: just restates the code.
+// Assign 1.5 to speed.
 const walkSpeed = 1.5
 ```
 
