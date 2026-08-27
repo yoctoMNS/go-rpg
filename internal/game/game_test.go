@@ -7,9 +7,6 @@ import (
 	"github.com/yoctoMNS/go-rpg/internal/game"
 )
 
-// Layout must keep returning the fixed logical resolution regardless of the
-// actual window size. If this ever breaks, every coordinate calculation in
-// the game breaks with it, so it is guarded by a test from the very start.
 func TestGame_Layout_ReturnsLogicalResolution(t *testing.T) {
 	t.Parallel()
 
@@ -40,7 +37,6 @@ func TestGame_Layout_ReturnsLogicalResolution(t *testing.T) {
 	}
 }
 
-// Update should only advance state and never return an error.
 func TestGame_Update_NoError(t *testing.T) {
 	t.Parallel()
 

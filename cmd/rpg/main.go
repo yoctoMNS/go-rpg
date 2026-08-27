@@ -1,7 +1,4 @@
 // Command rpg is the entry point of the game.
-//
-// main is kept to a single responsibility: startup. Game logic lives under
-// internal; main only assembles configuration and runs it (Composition Root).
 package main
 
 import (
